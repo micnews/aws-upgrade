@@ -30,7 +30,7 @@ module.exports = function(config) {
   }
 
   return function(opts, cb) {
-    if (typeof opts == 'string') opts = { name: opts.name }
+    if (typeof opts == 'string') opts = { name: opts }
     getServers(opts.name, function(err, servers) {
       if (err) return cb(err)
       if (!servers.length) return cb(new Error('No servers online'))
