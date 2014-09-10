@@ -24,6 +24,7 @@ module.exports = function(config) {
       port: port,
       host: host
     }, function(err, data) {
+      console.log('upgrade server ...', err, data);
       stream.end()
       cb(err, data)
     })
@@ -32,11 +33,13 @@ module.exports = function(config) {
   return function(opts, cb) {
     if (typeof opts == 'string') opts = { name: opts }
     getServers(opts.name, function(err, servers) {
+      console.log('getting servers ...', err, servers);
       if (err) return cb(err)
       if (!servers.length) return cb(new Error('No servers online'))
       var errors = 0
       async.each(servers, function(server, done) {
         upgrade(server.privateIpAddress, function(err, data) {
+          if (typeof opts == 'string') opts = { name: opts }
           if (err || (!err && data.value !== 'OK')) ++errors
           done()
         })
